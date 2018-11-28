@@ -1,46 +1,46 @@
 // Base variables
-var path = require('path');
-var webpack = require('webpack');
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var CleanWebpackPlugin = require('clean-webpack-plugin');
+const path = require('path');
+const webpack = require('webpack');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 // Module settings
 module.exports = (env, argv) => ({
-   entry: {
-     //JS and scss entry points for our main/index page
+  entry: {
+    // JS and scss entry points for our main/index page
     index: [
       './src/js/main.js', // Javascript entry point
       './src/scss/main.scss', // scss entry point
-    ]
+    ],
   },
   // Path for bundled files
   output: {
     path: path.resolve(__dirname, 'dist'),
-    chunkFilename: "js/[name]-[contenthash:4].js",
-    filename: "js/[name]-[contenthash:4].js"
+    chunkFilename: 'js/[name]-[contenthash:4].js',
+    filename: 'js/[name]-[contenthash:4].js',
   },
-   // enable source maps
-   devtool: argv.mode === 'development' ? 'eval' : 'source-map',
+  // enable source maps
+  devtool: 'source-map',
 
-   // directory for starting webpack dev server
-   devServer: {
-       contentBase: './'
-   },
+  // directory for starting webpack dev server
+  devServer: {
+    contentBase: './',
+  },
 
-    // optimizing configuration
-    optimization: {
-      minimizer: [
-        new UglifyJsPlugin({
-          cache: true,
-          parallel: true,
-          sourceMap: true // set to true if you want JS source maps
-        }),
-        new OptimizeCSSAssetsPlugin({})
-      ]
-    },
+  // optimizing configuration
+  optimization: {
+    minimizer: [
+      new UglifyJsPlugin({
+        cache: true,
+        parallel: true,
+        sourceMap: true, // set to true if you want JS source maps
+      }),
+      new OptimizeCssAssetsPlugin({}),
+    ],
+  },
   module: {
     rules: [
       {
@@ -50,10 +50,25 @@ module.exports = (env, argv) => ({
       },
       {
         test: /\.(sass|scss|css)$/,
-        use:  [
-         MiniCssExtractPlugin.loader,
-         'css-loader',
-         'sass-loader'
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              publicPath: '../',
+            },
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
         ],
       },
       {
@@ -62,14 +77,26 @@ module.exports = (env, argv) => ({
           {
             loader: 'html-loader',
             options: {
-              attrs: ['img:src', 'link:href',':data-src'],
+              attrs: ['img:src', 'link:href', ':data-src'],
               minimize: true,
-            }
-          }
-        ]
+            },
+          },
+        ],
       },
       {
-        test: /\.(png|jpe?g|ico|svg)$/,
+        test: /\.(png|gif|jpe?g|ico|svg)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: 'img/[name].[ext]',
+              context: 'src',
+            },
+          },
+        ],
+      },
+      {
+        test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
         exclude: /node_modules/,
         use: [
           {
@@ -77,22 +104,11 @@ module.exports = (env, argv) => ({
             options: {
               name: '[path][name].[ext]',
               context: 'src',
-            }
-          }
-        ]
+              publicPath: '../',
+            },
+          },
+        ],
       },
-      {
-        test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
-        exclude: /node_modules/,
-        use: [{
-            loader: 'file-loader',
-            options: {
-                name: '[path][name].[ext]',
-                context: 'src',
-                publicPath: '../'
-            }
-        }]
-    },
       {
         test: /\.html$/,
         use: [
@@ -100,18 +116,18 @@ module.exports = (env, argv) => ({
             loader: 'file-loader',
             options: {
               name: '[name].[ext]',
-            }
-          }
+            },
+          },
         ],
-        exclude: path.resolve(__dirname, 'src/index.html')
-      }
+        exclude: path.resolve(__dirname, 'src/index.html'),
+      },
     ],
   },
   plugins: [
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',
-      'windows.jQuery': 'jquery',
+      'window.jQuery': 'jquery',
     }),
     new MiniCssExtractPlugin({
       filename: 'css/[name]-[contenthash:4].css',
@@ -119,8 +135,8 @@ module.exports = (env, argv) => ({
     }),
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: 'src/index.html'
-    }),    
-    new CleanWebpackPlugin(['dist'])
-  ]
+      template: 'src/index.html',
+    }),
+    new CleanWebpackPlugin(['dist']),
+  ],
 });

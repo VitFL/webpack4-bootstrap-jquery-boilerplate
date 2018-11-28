@@ -8,7 +8,7 @@
     "precommit": "lint-staged",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
-    "dev": "webpack-dev-server --watch --mode development",
+    "dev": "webpack-dev-server --watch --host localhost --mode development",
     "lint": "eslint src",
     "lint:fix": "npm run lint -- --fix"
   },
