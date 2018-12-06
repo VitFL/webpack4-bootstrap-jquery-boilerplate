@@ -1,6 +1,8 @@
 // Base variables
 const path = require('path');
 const webpack = require('webpack');
+
+// Importing plugins that do not come by default in webpack
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
@@ -10,7 +12,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 // Module settings
 module.exports = (env, argv) => ({
   entry: {
-    // JS and scss entry points for our main/index page
+    // JS and scss entry points for main/index page
     index: [
       './src/js/main.js', // Javascript entry point
       './src/scss/main.scss', // scss entry point
@@ -30,7 +32,7 @@ module.exports = (env, argv) => ({
     contentBase: './',
   },
 
-  // optimizing configuration
+  // optimization configuration
   optimization: {
     minimizer: [
       new UglifyJsPlugin({
@@ -59,6 +61,12 @@ module.exports = (env, argv) => ({
           },
           {
             loader: 'css-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
+          {
+            loader: 'postcss-loader', // configuration in postcss.config.js
             options: {
               sourceMap: true,
             },
