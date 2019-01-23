@@ -4,13 +4,11 @@
   "description": "Webpack4 + Bootstrap 4 Grid + Jquery boilerplate",
   "main": "src/js/app.js",
   "scripts": {
-    "build": "webpack --mode production",
-    "precommit": "lint-staged",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist",
     "dev": "webpack-dev-server --watch --host localhost --mode development",
+    "build": "webpack --mode production",
     "lint": "eslint src",
-    "lint:fix": "npm run lint -- --fix"
+    "lint:fix": "npm run lint -- --fix",
+    "deploy": "gh-pages -d dist"
   },
   "author": "VitFL",
   "license": "MIT",
@@ -54,14 +52,9 @@
     "webpack-cli": "^3.2.1",
     "webpack-dev-server": "^3.1.14"
   },
-  "lint-staged": {
-    "package.json": [
-      "prettier-package-json --write",
-      "git add"
-    ],
-    "*.js": [
-      "eslint --fix",
-      "git add"
-    ]
-  }
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "IE >= 10"
+  ]
 }
