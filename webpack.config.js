@@ -9,8 +9,14 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
+const src = path.resolve(__dirname, 'src/');
 // Module settings
-module.exports = (env, argv) => ({
+module.exports = {
+  resolve: {
+    alias: {
+      '@': src,
+    },
+  },
   entry: {
     // JS and scss entry points for main/index page
     index: [
@@ -71,6 +77,7 @@ module.exports = (env, argv) => ({
               sourceMap: true,
             },
           },
+          'resolve-url-loader',
           {
             loader: 'sass-loader',
             options: {
@@ -98,21 +105,19 @@ module.exports = (env, argv) => ({
             loader: 'file-loader',
             options: {
               name: 'img/[name].[ext]',
-              context: 'src',
             },
           },
         ],
       },
       {
         test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
-        exclude: /node_modules/,
+        exclude: /img/,
         use: [
           {
             loader: 'file-loader',
             options: {
-              name: '[path][name].[ext]',
-              context: 'src',
-              publicPath: '../',
+              name: 'fonts/[name].[ext]',
+              //  publicPath: '../', // fonts folder is outside scss/css folder, thats why we need to go one folder up.
             },
           },
         ],
@@ -147,4 +152,4 @@ module.exports = (env, argv) => ({
     }),
     new CleanWebpackPlugin(['dist']),
   ],
-});
+};
