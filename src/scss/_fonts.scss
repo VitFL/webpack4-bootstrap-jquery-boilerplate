@@ -1,8 +1,7 @@
-@import "_mixins/font-face";
+@import '_mixins/font-face';
 
-@include font-face("roboto-example", "../fonts/RobotoRegular/RobotoRegular");
-@include font-face("roboto-example", "../fonts/RobotoBold/RobotoBold", 700);
-
+@include font-face('Roboto', '~@/fonts/RobotoRegular');
+@include font-face('Roboto', '~@/fonts/RobotoBold', 700);
 
 // Common weight name mapping
 // The numerical values 100 to 900 roughly correspond to the following common weight names:
